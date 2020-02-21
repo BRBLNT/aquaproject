@@ -5,43 +5,116 @@ import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 
 public class View extends javax.swing.JFrame {
+
     DefaultListModel<String> listModel = new DefaultListModel();
     FileReadWrite data = new FileReadWrite();
     ArrayList<String> fish = data.getFishData();
+    ArrayList<Fish> fishes = new ArrayList<>();
     
-    private boolean getSex(){
-        if(male.isSelected()){return true;}
-        else{return false;}
+    private void removeFish(ArrayList<Fish> temporary){
+        try {
+            String names = fishList.getSelectedValue();
+            for (Fish actual : temporary) {
+            if (names.equals(actual.getName())) {
+                fishes.remove(actual);
+                listModel.removeElement(actual.getName());
+                name.setText("");
+                age.setValue(0);
+                fishList.setSelectedIndex(-1);
+            }
+        }
+        } catch (Exception e) {
+        }
+        
         
     }
-    private boolean errorCheck(){
+    
+    private boolean getSex() {
+        if (male.isSelected()) {
+            return true;
+        } else {
+            return false;
+        }
+        
+    }
+    
+    private void showData(ArrayList<Fish> temporary) {
+        try {
+            String names = fishList.getSelectedValue();
+        for (Fish actual : temporary) {
+            if (names.equals(actual.getName())) {
+                name.setText(actual.getName());
+                spec.setSelectedItem(actual.getSpecies());
+                temp.setText(actual.getTemp() + "-Celsius");
+                minSize.setText(actual.getLenght() + "-liter");
+                size.setText(actual.getLenght() + "-cm");
+                food.setText(actual.getFood());
+                age.setValue(actual.getAge());
+                if (actual.isSex()) {
+                    male.setSelected(true);
+                } else {
+                    female.setSelected(true);
+                }
+                String place = "/pics/";
+                place = place.concat(actual.getPicsID() + "");
+                place = place.concat(".jpg");
+                //System.out.println(place);
+                try {
+                    picture.setIcon(new javax.swing.ImageIcon(getClass().getResource(place)));
+                } catch (Exception e) {
+                    System.out.println("Hibás elérési út");
+                }
+            }
+        }
+        } catch (Exception e) {
+        }
+        
+    }
+    
+    private boolean errorCheck() {
         boolean error = false;
-        if(name.getText().equals(" ") || (int) age.getValue() <= 0){
+        if (name.getText().equals(" ") || (int) age.getValue() <= 0) {
             error = true;
             JOptionPane.showMessageDialog(rootPane, "Hibás érték vagy üres mező!");
         }
         return error;
     }
-    private void addFish(){
-        if(!errorCheck()){
-            Fish fish = new Fish(name.getText(), (int) age.getValue(),(String) spec.getSelectedItem(), 100 , getSex());
+
+    private void addFish() {
+        if (!errorCheck()) {
+            int picsID = 0;
+            String actualSpec = (String) spec.getSelectedItem();
+            
+            for (int i = 0; i < fish.size(); i++) {
+                
+                if (fish.get(i).split(" ")[0].equals(actualSpec)) {
+                    String[] temporary = fish.get(i).split(" ");
+                    picsID = Integer.parseInt(temporary[5]);
+                }
+            }
+            
+            Fish fish = new Fish(name.getText(), (int) age.getValue(), (String) spec.getSelectedItem(), 100, getSex(), Integer.parseInt(temp.getText().split("-")[0]), Integer.parseInt(size.getText().split("-")[0]), food.getText(), Integer.parseInt(minSize.getText().split("-")[0]), picsID);
+            fishes.add(fish);
             listModel.addElement(fish.getName());
         }
+        name.setText("");
+        age.setValue(0);
         
     }
-    
-    private void defaultDataSet(){
+
+    private void defaultDataSet() {
         for (int i = 0; i < fish.size(); i++) {
             String[] temp = fish.get(i).split(" ");
             spec.addItem((temp[0]));
         }
     }
-    private void changeFish(){
+
+    private void changeFish() {
         String actualSpec = (String) spec.getSelectedItem();
         //System.out.println(actualSpec);
         for (int i = 0; i < fish.size(); i++) {
             
-            if(fish.get(i).split(" ")[0].equals(actualSpec)){
+            if (fish.get(i).split(" ")[0].equals(actualSpec)) {
                 String[] temporary = fish.get(i).split(" ");
                 temp.setText(temporary[1]);
                 minSize.setText(temporary[2]);
@@ -67,7 +140,7 @@ public class View extends javax.swing.JFrame {
         fishList.setModel(listModel);
         
     }
-
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -111,6 +184,11 @@ public class View extends javax.swing.JFrame {
         setResizable(false);
 
         fishList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        fishList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                fishListValueChanged(evt);
+            }
+        });
         jScrollPane1.setViewportView(fishList);
 
         picture.setBackground(new java.awt.Color(255, 255, 255));
@@ -161,9 +239,13 @@ public class View extends javax.swing.JFrame {
         modify.setText("Módosít");
 
         delete.setText("Töröl");
+        delete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteActionPerformed(evt);
+            }
+        });
 
         gif.setIcon(new javax.swing.ImageIcon(getClass().getResource("/aquariumproject/giphy.gif"))); // NOI18N
-        gif.setBorder(javax.swing.BorderFactory.createMatteBorder(5, 5, 5, 5, new java.awt.Color(0, 0, 0)));
 
         desktopPane.setLayer(jScrollPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
         desktopPane.setLayer(picture, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -251,7 +333,7 @@ public class View extends javax.swing.JFrame {
                     .addGroup(desktopPaneLayout.createSequentialGroup()
                         .addGap(31, 31, 31)
                         .addComponent(gif)))
-                .addContainerGap(0, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         desktopPaneLayout.setVerticalGroup(
             desktopPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -350,14 +432,14 @@ public class View extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void exitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitActionPerformed
-       int confirmed = JOptionPane.showConfirmDialog(null, "Biztosan kilép?", "Kilépés", JOptionPane.YES_NO_OPTION);
+        int confirmed = JOptionPane.showConfirmDialog(null, "Biztosan kilép?", "Kilépés", JOptionPane.YES_NO_OPTION);
         if (confirmed == JOptionPane.YES_OPTION) {
             System.exit(0);
         }
     }//GEN-LAST:event_exitActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-      JOptionPane.showMessageDialog(rootPane, "Készítők: \nKészült: 2020");
+        JOptionPane.showMessageDialog(rootPane, "Készítők: \nKészült: 2020 ");
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void specItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_specItemStateChanged
@@ -368,6 +450,16 @@ public class View extends javax.swing.JFrame {
         addFish();
     }//GEN-LAST:event_addActionPerformed
 
+    private void fishListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_fishListValueChanged
+        showData(fishes);
+    }//GEN-LAST:event_fishListValueChanged
+
+    private void deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteActionPerformed
+       
+            removeFish(fishes);
+        
+    }//GEN-LAST:event_deleteActionPerformed
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

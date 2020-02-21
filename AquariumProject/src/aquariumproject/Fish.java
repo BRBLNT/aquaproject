@@ -2,6 +2,11 @@ package aquariumproject;
 
 public class Fish {
 
+    @Override
+    public String toString() {
+        return "Fish{" + "name=" + name + ", age=" + age + ", species=" + species + ", health=" + health + ", sex=" + sex + ", temp=" + temp + ", lenght=" + lenght + ", food=" + food + ", minimumPoolSize=" + minimumPoolSize + '}';
+    }
+
     public String getName() {
         return name;
     }
@@ -20,6 +25,22 @@ public class Fish {
 
     public boolean isSex() {
         return sex;
+    }
+
+    public int getTemp() {
+        return temp;
+    }
+
+    public int getLenght() {
+        return lenght;
+    }
+
+    public String getFood() {
+        return food;
+    }
+
+    public int getMinimumPoolSize() {
+        return minimumPoolSize;
     }
 
     public void setName(String name) {
@@ -42,19 +63,47 @@ public class Fish {
         this.sex = sex;
     }
 
+    public void setTemp(int temp) {
+        this.temp = temp;
+    }
+
+    public void setLenght(int lenght) {
+        this.lenght = lenght;
+    }
+
+    public void setFood(String food) {
+        this.food = food;
+    }
+
+    public void setMinimumPoolSize(int minimumPoolSize) {
+        this.minimumPoolSize = minimumPoolSize;
+    }
     private String name;
     private int age;
     private String species;
     private int health;
     private boolean sex;
+    private int temp;
+    private int lenght;
+    private String food;
+    private int minimumPoolSize;
+    private int picsID;
+
+    public int getPicsID() {
+        return picsID;
+    }
     
-    
-    public Fish(String name, int age, String species, int health, boolean sex) {
+    public Fish(String name, int age, String species, int health, boolean sex, int temp, int lenght, String food, int minimumPoolSize,int picsID) {
         this.name = name;
         this.age = age;
         this.species = species;
         this.health = health;
         this.sex = sex;
+        this.temp = temp;
+        this.lenght = lenght;
+        this.food = food;
+        this.minimumPoolSize = minimumPoolSize;
+        this.picsID = picsID;
     }
     
     
