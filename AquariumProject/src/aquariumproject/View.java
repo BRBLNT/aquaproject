@@ -10,6 +10,31 @@ public class View extends javax.swing.JFrame {
     FileReadWrite data = new FileReadWrite();
     ArrayList<String> fish = data.getFishData();
     ArrayList<Fish> fishes = new ArrayList<>();
+    ArrayList<String> userFish = data.getUserFishData();
+    
+    private void saveUserData(){
+        data.writeData(fishes);
+    }
+    
+    private void loadData(ArrayList<String> fishesTemp){
+        for (String str : fishesTemp) {
+            Fish ActualFish = new Fish(str.split(" ")[0], Integer.parseInt(str.split(" ")[1]), 
+                    (String) str.split(" ")[2],
+                    Integer.parseInt(str.split(" ")[3]),
+                    check(str.split(" ")[4]),
+                    Integer.parseInt(str.split(" ")[5]), Integer.parseInt(str.split(" ")[6]),
+                    str.split(" ")[7], Integer.parseInt(str.split(" ")[8]), Integer.parseInt(str.split(" ")[9]));
+            listModel.addElement(str.split(" ")[0]);
+            fishes.add(ActualFish);
+        }
+    }
+    private boolean check(String str){
+        if (str.equals("true")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
     
     private void removeFish(ArrayList<Fish> temporary){
         try {
@@ -138,6 +163,7 @@ public class View extends javax.swing.JFrame {
         initComponents();
         defaultDataSet();
         fishList.setModel(listModel);
+        loadData(userFish);
         
     }
     
@@ -393,6 +419,11 @@ public class View extends javax.swing.JFrame {
         menu1.setText("Fájl");
 
         save.setText("Mentés");
+        save.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveActionPerformed(evt);
+            }
+        });
         menu1.add(save);
 
         jMenuItem1.setText("Információ");
@@ -459,6 +490,10 @@ public class View extends javax.swing.JFrame {
             removeFish(fishes);
         
     }//GEN-LAST:event_deleteActionPerformed
+
+    private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
+       saveUserData();
+    }//GEN-LAST:event_saveActionPerformed
     
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
