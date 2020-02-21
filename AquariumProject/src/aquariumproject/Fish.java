@@ -2,11 +2,10 @@ package aquariumproject;
 
 public class Fish {
 
-    @Override
-    public String toString() {
-        return "Fish{" + "name=" + name + ", age=" + age + ", species=" + species + ", health=" + health + ", sex=" + sex + ", temp=" + temp + ", lenght=" + lenght + ", food=" + food + ", minimumPoolSize=" + minimumPoolSize + '}';
-    }
+   
 
+    
+    
     public String getName() {
         return name;
     }
@@ -106,6 +105,11 @@ public class Fish {
         this.picsID = picsID;
     }
     
+     @Override
+        public String toString() {
+        String str = name+" "+age+" "+species+" "+health+" "+sex+" "+temp+" "+lenght+" "+food+" "+minimumPoolSize+" "+picsID;
+        return str;
+    }
     
     
     

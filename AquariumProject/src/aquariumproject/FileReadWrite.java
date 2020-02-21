@@ -12,6 +12,19 @@ public class FileReadWrite {
         readFile();
     }
     
+    public void writeData(ArrayList<Fish> fish){
+        try {
+            RandomAccessFile writer = new RandomAccessFile("user.txt","rw");
+            writer.seek(writer.length());
+           
+            for (Fish temp : fish) {
+                writer.writeBytes(temp.toString()+"\n");
+            }
+        } catch (IOException exc) {
+            System.out.println("Hiba: "+exc);
+        }
+    }
+    
     public ArrayList<String> getFishData() {
         return fishData;
     }
