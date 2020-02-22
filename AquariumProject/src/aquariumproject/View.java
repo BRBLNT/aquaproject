@@ -2,6 +2,7 @@ package aquariumproject;
 
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
+//import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 public class View extends javax.swing.JFrame {
@@ -11,96 +12,102 @@ public class View extends javax.swing.JFrame {
     ArrayList<String> fish = data.getFishData();
     ArrayList<Fish> fishes = new ArrayList<>();
     ArrayList<String> userFish = data.getUserFishData();
+    //ImageIcon dialogIcon = new ImageIcon("icon.png");
     
-    private void saveUserData(){
+    private void saveUserData() {
         data.writeData(fishes);
     }
-    
-    private void loadData(ArrayList<String> fishesTemp){
+
+    private void loadData(ArrayList<String> fishesTemp) {
         for (String str : fishesTemp) {
-            Fish ActualFish = new Fish(str.split(" ")[0], Integer.parseInt(str.split(" ")[1]), 
-                    (String) str.split(" ")[2],
-                    Integer.parseInt(str.split(" ")[3]),
-                    check(str.split(" ")[4]),
-                    Integer.parseInt(str.split(" ")[5]), Integer.parseInt(str.split(" ")[6]),
-                    str.split(" ")[7], Integer.parseInt(str.split(" ")[8]), Integer.parseInt(str.split(" ")[9]));
-            listModel.addElement(str.split(" ")[0]);
-            fishes.add(ActualFish);
+            try {
+                Fish ActualFish = new Fish(str.split(" ")[0], Integer.parseInt(str.split(" ")[1]),
+                        (String) str.split(" ")[2],
+                        Integer.parseInt(str.split(" ")[3]),
+                        check(str.split(" ")[4]),
+                        Integer.parseInt(str.split(" ")[5]), Integer.parseInt(str.split(" ")[6]),
+                        str.split(" ")[7], Integer.parseInt(str.split(" ")[8]), Integer.parseInt(str.split(" ")[9]));
+                listModel.addElement(str.split(" ")[0]);
+                fishes.add(ActualFish);
+            } catch (Exception e) {
+                System.out.println("Hiba: " + e);
+            }
+
         }
     }
-    private boolean check(String str){
+
+    private boolean check(String str) {
         if (str.equals("true")) {
             return true;
         } else {
             return false;
         }
     }
-    
-    private void removeFish(ArrayList<Fish> temporary){
+
+    private void removeFish(ArrayList<Fish> temporary) {
         try {
             String names = fishList.getSelectedValue();
             for (Fish actual : temporary) {
-            if (names.equals(actual.getName())) {
-                fishes.remove(actual);
-                listModel.removeElement(actual.getName());
-                name.setText("");
-                age.setValue(0);
-                fishList.setSelectedIndex(-1);
+                if (names.equals(actual.getName())) {
+                    fishes.remove(actual);
+                    listModel.removeElement(actual.getName());
+                    name.setText("");
+                    age.setValue(1);
+                    fishList.setSelectedIndex(-1);
+                }
             }
-        }
         } catch (Exception e) {
         }
-        
-        
+
     }
-    
+
     private boolean getSex() {
         if (male.isSelected()) {
             return true;
         } else {
             return false;
         }
-        
+
     }
-    
+
     private void showData(ArrayList<Fish> temporary) {
         try {
             String names = fishList.getSelectedValue();
-        for (Fish actual : temporary) {
-            if (names.equals(actual.getName())) {
-                name.setText(actual.getName());
-                spec.setSelectedItem(actual.getSpecies());
-                temp.setText(actual.getTemp() + "-Celsius");
-                minSize.setText(actual.getLenght() + "-liter");
-                size.setText(actual.getLenght() + "-cm");
-                food.setText(actual.getFood());
-                age.setValue(actual.getAge());
-                if (actual.isSex()) {
-                    male.setSelected(true);
-                } else {
-                    female.setSelected(true);
-                }
-                String place = "/pics/";
-                place = place.concat(actual.getPicsID() + "");
-                place = place.concat(".jpg");
-                //System.out.println(place);
-                try {
-                    picture.setIcon(new javax.swing.ImageIcon(getClass().getResource(place)));
-                } catch (Exception e) {
-                    System.out.println("Hibás elérési út");
+            for (Fish actual : temporary) {
+                if (names.equals(actual.getName())) {
+                    name.setText(actual.getName());
+                    spec.setSelectedItem(actual.getSpecies());
+                    temp.setText(actual.getTemp() + "-Celsius");
+                    minSize.setText(actual.getLenght() + "-liter");
+                    size.setText(actual.getLenght() + "-cm");
+                    food.setText(actual.getFood());
+                    age.setValue(actual.getAge());
+                    if (actual.isSex()) {
+                        male.setSelected(true);
+                    } else {
+                        female.setSelected(true);
+                    }
+                    String place = "/pics/";
+                    place = place.concat(actual.getPicsID() + "");
+                    place = place.concat(".jpg");
+                    //System.out.println(place);
+                    try {
+                        picture.setIcon(new javax.swing.ImageIcon(getClass().getResource(place)));
+                    } catch (Exception e) {
+                        System.out.println("Hibás elérési út");
+                    }
                 }
             }
-        }
         } catch (Exception e) {
         }
-        
+
     }
-    
+
     private boolean errorCheck() {
         boolean error = false;
-        if (name.getText().equals(" ") || (int) age.getValue() <= 0) {
+        if (name.getText().isEmpty() || (int) age.getValue() <= 0) {
             error = true;
-            JOptionPane.showMessageDialog(rootPane, "Hibás érték vagy üres mező!");
+            JOptionPane.showMessageDialog(rootPane, "Hibás érték vagy üres mező!","Hiba", JOptionPane.ERROR_MESSAGE );
         }
         return error;
     }
@@ -109,22 +116,22 @@ public class View extends javax.swing.JFrame {
         if (!errorCheck()) {
             int picsID = 0;
             String actualSpec = (String) spec.getSelectedItem();
-            
+
             for (int i = 0; i < fish.size(); i++) {
-                
+
                 if (fish.get(i).split(" ")[0].equals(actualSpec)) {
                     String[] temporary = fish.get(i).split(" ");
                     picsID = Integer.parseInt(temporary[5]);
                 }
             }
-            
+
             Fish fish = new Fish(name.getText(), (int) age.getValue(), (String) spec.getSelectedItem(), 100, getSex(), Integer.parseInt(temp.getText().split("-")[0]), Integer.parseInt(size.getText().split("-")[0]), food.getText(), Integer.parseInt(minSize.getText().split("-")[0]), picsID);
             fishes.add(fish);
             listModel.addElement(fish.getName());
         }
         name.setText("");
-        age.setValue(0);
-        
+        age.setValue(1);
+
     }
 
     private void defaultDataSet() {
@@ -138,7 +145,7 @@ public class View extends javax.swing.JFrame {
         String actualSpec = (String) spec.getSelectedItem();
         //System.out.println(actualSpec);
         for (int i = 0; i < fish.size(); i++) {
-            
+
             if (fish.get(i).split(" ")[0].equals(actualSpec)) {
                 String[] temporary = fish.get(i).split(" ");
                 temp.setText(temporary[1]);
@@ -154,19 +161,20 @@ public class View extends javax.swing.JFrame {
                 } catch (Exception e) {
                     System.out.println("Hibás elérési út");
                 }
-                
+
             }
         }
     }
-    
+
     public View() {
         initComponents();
         defaultDataSet();
         fishList.setModel(listModel);
         loadData(userFish);
-        
+        age.setValue(1);
+
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -209,6 +217,9 @@ public class View extends javax.swing.JFrame {
         setName("mainFrame"); // NOI18N
         setResizable(false);
 
+        desktopPane.setForeground(new java.awt.Color(255, 255, 255));
+
+        fishList.setFont(new java.awt.Font("Tekton Pro", 0, 10)); // NOI18N
         fishList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         fishList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
@@ -220,16 +231,25 @@ public class View extends javax.swing.JFrame {
         picture.setBackground(new java.awt.Color(255, 255, 255));
         picture.setForeground(new java.awt.Color(255, 255, 255));
         picture.setText("picture");
+        picture.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
+        jLabel1.setFont(new java.awt.Font("Tekton Pro", 0, 14)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Név:");
 
+        jLabel2.setFont(new java.awt.Font("Tekton Pro", 0, 14)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Nem:");
 
         buttonGroup1.add(male);
+        male.setFont(new java.awt.Font("Tekton Pro", 1, 12)); // NOI18N
+        male.setForeground(new java.awt.Color(255, 255, 255));
         male.setSelected(true);
         male.setText("Hím");
 
         buttonGroup1.add(female);
+        female.setFont(new java.awt.Font("Tekton Pro", 1, 12)); // NOI18N
+        female.setForeground(new java.awt.Color(255, 255, 255));
         female.setText("Nőstény");
 
         jLabel3.setFont(new java.awt.Font("Tekton Pro", 0, 14)); // NOI18N
@@ -237,6 +257,8 @@ public class View extends javax.swing.JFrame {
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("Halak:");
 
+        jLabel4.setFont(new java.awt.Font("Tekton Pro", 0, 14)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Faj:");
 
         spec.addItemListener(new java.awt.event.ItemListener() {
@@ -245,26 +267,61 @@ public class View extends javax.swing.JFrame {
             }
         });
 
+        jLabel5.setFont(new java.awt.Font("Tekton Pro", 0, 14)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Kor:");
 
+        jLabel6.setFont(new java.awt.Font("Tekton Pro", 0, 12)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("Hőigény:");
 
+        temp.setFont(new java.awt.Font("Tekton Pro", 0, 12)); // NOI18N
+        temp.setForeground(new java.awt.Color(255, 255, 255));
+
+        jLabel7.setFont(new java.awt.Font("Tekton Pro", 0, 12)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setText("Minimum akvárium méret:");
 
+        minSize.setFont(new java.awt.Font("Tekton Pro", 0, 12)); // NOI18N
+        minSize.setForeground(new java.awt.Color(255, 255, 255));
+
+        jLabel8.setFont(new java.awt.Font("Tekton Pro", 0, 12)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
         jLabel8.setText("Testhossz:");
 
+        size.setFont(new java.awt.Font("Tekton Pro", 0, 12)); // NOI18N
+        size.setForeground(new java.awt.Color(255, 255, 255));
+
+        jLabel9.setFont(new java.awt.Font("Tekton Pro", 0, 12)); // NOI18N
+        jLabel9.setForeground(new java.awt.Color(255, 255, 255));
         jLabel9.setText("Étel:");
 
+        food.setFont(new java.awt.Font("Tekton Pro", 0, 12)); // NOI18N
+        food.setForeground(new java.awt.Color(255, 255, 255));
+
+        add.setBackground(new java.awt.Color(204, 255, 255));
+        add.setFont(new java.awt.Font("Tekton Pro", 0, 14)); // NOI18N
         add.setText("Hozzáad");
+        add.setToolTipText("Új hal hozzáadása");
+        add.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+        add.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         add.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addActionPerformed(evt);
             }
         });
 
+        modify.setBackground(new java.awt.Color(204, 255, 255));
+        modify.setFont(new java.awt.Font("Tekton Pro", 0, 14)); // NOI18N
         modify.setText("Módosít");
+        modify.setToolTipText("Kiválasztott elem módosítása");
+        modify.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
+        delete.setBackground(new java.awt.Color(204, 255, 255));
+        delete.setFont(new java.awt.Font("Tekton Pro", 0, 14)); // NOI18N
         delete.setText("Töröl");
+        delete.setToolTipText("Kíválasztott elem eltávolítása");
+        delete.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
         delete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 deleteActionPerformed(evt);
@@ -272,6 +329,7 @@ public class View extends javax.swing.JFrame {
         });
 
         gif.setIcon(new javax.swing.ImageIcon(getClass().getResource("/aquariumproject/giphy.gif"))); // NOI18N
+        gif.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         desktopPane.setLayer(jScrollPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
         desktopPane.setLayer(picture, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -326,40 +384,38 @@ public class View extends javax.swing.JFrame {
                                         .addGap(30, 30, 30)
                                         .addGroup(desktopPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addGroup(desktopPaneLayout.createSequentialGroup()
-                                                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(size, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(desktopPaneLayout.createSequentialGroup()
+                                                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                                 .addComponent(food, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addGroup(desktopPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                                .addGroup(desktopPaneLayout.createSequentialGroup()
-                                                    .addGroup(desktopPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addGroup(desktopPaneLayout.createSequentialGroup()
-                                                            .addGroup(desktopPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                .addComponent(spec, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                            .addGap(32, 32, 32)
-                                                            .addGroup(desktopPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                .addComponent(age, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                                        .addComponent(jLabel7))
-                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                    .addComponent(minSize, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, desktopPaneLayout.createSequentialGroup()
-                                                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                    .addComponent(size, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, desktopPaneLayout.createSequentialGroup()
-                                                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                    .addComponent(temp, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                            .addGroup(desktopPaneLayout.createSequentialGroup()
+                                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(temp, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(desktopPaneLayout.createSequentialGroup()
+                                                .addComponent(jLabel7)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(minSize, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(desktopPaneLayout.createSequentialGroup()
+                                                .addGroup(desktopPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(spec, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addGap(32, 32, 32)
+                                                .addGroup(desktopPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(age, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                                     .addGroup(desktopPaneLayout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addGap(6, 6, 6)
                                         .addComponent(modify, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(delete, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                     .addGroup(desktopPaneLayout.createSequentialGroup()
                         .addGap(31, 31, 31)
                         .addComponent(gif)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(46, Short.MAX_VALUE))
         );
         desktopPaneLayout.setVerticalGroup(
             desktopPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -386,33 +442,32 @@ public class View extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(desktopPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(male)
-                                    .addGroup(desktopPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(jLabel6)
-                                        .addComponent(temp, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(desktopPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(male, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(temp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(desktopPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(desktopPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(minSize, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(desktopPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(female)
-                                        .addComponent(jLabel7))
-                                    .addComponent(minSize, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                        .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(desktopPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel8)
-                            .addComponent(size, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(desktopPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel9)
-                            .addComponent(food, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(33, 33, 33)
+                            .addComponent(size, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(9, 9, 9)
                         .addGroup(desktopPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(add, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
+                            .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(food, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(33, 33, 33)
+                        .addGroup(desktopPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, false)
+                            .addComponent(add)
                             .addComponent(modify, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(delete, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(gif)
-                        .addGap(0, 3, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
@@ -486,15 +541,30 @@ public class View extends javax.swing.JFrame {
     }//GEN-LAST:event_fishListValueChanged
 
     private void deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteActionPerformed
-       
+        if (fishList.getSelectedIndex() < 0) {
+            JOptionPane.showMessageDialog(rootPane, "Nincs kiválasztott elem!","Hiba", JOptionPane.ERROR_MESSAGE );
+            return;
+        }
+        int confirmed = JOptionPane.showConfirmDialog(null, "Biztosan eltávolítja?", "Törlés", JOptionPane.YES_NO_OPTION);
+        if (confirmed == JOptionPane.YES_OPTION) {
             removeFish(fishes);
-        
+        }
+
+
     }//GEN-LAST:event_deleteActionPerformed
 
     private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
-       saveUserData();
+        if (listModel.size() < 0) {
+            return;
+        }
+        int confirmed = JOptionPane.showConfirmDialog(null, "Biztosan menti?", "Mentés", JOptionPane.YES_NO_OPTION);
+        if (confirmed == JOptionPane.YES_OPTION) {
+            saveUserData();
+        }
+
+
     }//GEN-LAST:event_saveActionPerformed
-    
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

@@ -14,8 +14,8 @@ public class FileReadWrite {
     
     public void writeData(ArrayList<Fish> fish){
         try {
-            RandomAccessFile writer = new RandomAccessFile("user.txt","rw");
-            writer.seek(writer.length());
+            RandomAccessFile writer = new RandomAccessFile("user.dat","rw");
+            //writer.seek(writer.length());
            
             for (Fish temp : fish) {
                 writer.writeBytes(temp.toString()+"\n");
@@ -35,7 +35,7 @@ public class FileReadWrite {
     
     private static void readFile(){
         try{
-            RandomAccessFile fileRead = new RandomAccessFile("fish.txt","r");
+            RandomAccessFile fileRead = new RandomAccessFile("fish.dat","r");
             for (String line = fileRead.readLine(); line != null ; line = fileRead.readLine()) {
                 fishData.add(line);
             }
@@ -43,7 +43,7 @@ public class FileReadWrite {
         }
         catch(IOException exc){System.out.println("Hiba: "+exc);}
         try{
-            RandomAccessFile fileRead = new RandomAccessFile("user.txt","r");
+            RandomAccessFile fileRead = new RandomAccessFile("user.dat","r");
             for (String line = fileRead.readLine(); line != null ; line = fileRead.readLine()) {
                 userFishData.add(line);
             }
