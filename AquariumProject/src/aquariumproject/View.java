@@ -17,7 +17,23 @@ public class View extends javax.swing.JFrame {
     private void saveUserData() {
         data.writeData(fishes);
     }
-
+    private void changeFishData(ArrayList<Fish> fish){
+        String names = fishList.getSelectedValue();
+        System.out.println(names);
+        for (Fish temp : fish) {
+            if(temp.getName().equals(names)){
+                temp.setName(name.getText()); 
+                temp.setAge((int) age.getValue()); 
+                temp.setSpecies((String) spec.getSelectedItem()); 
+                temp.setSex(getSex()); 
+                name.setText(" ");
+                age.setValue(1);
+            }
+        }
+        
+        
+    }
+    
     private void loadData(ArrayList<String> fishesTemp) {
         for (String str : fishesTemp) {
             try {
@@ -46,7 +62,7 @@ public class View extends javax.swing.JFrame {
 
     private void removeFish(ArrayList<Fish> temporary) {
         try {
-            String names = fishList.getSelectedValue();
+            String names = fishList.getSelectedValue();;
             for (Fish actual : temporary) {
                 if (names.equals(actual.getName())) {
                     fishes.remove(actual);
@@ -316,6 +332,11 @@ public class View extends javax.swing.JFrame {
         modify.setText("Módosít");
         modify.setToolTipText("Kiválasztott elem módosítása");
         modify.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+        modify.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                modifyActionPerformed(evt);
+            }
+        });
 
         delete.setBackground(new java.awt.Color(204, 255, 255));
         delete.setFont(new java.awt.Font("Tekton Pro", 0, 14)); // NOI18N
@@ -525,7 +546,7 @@ public class View extends javax.swing.JFrame {
     }//GEN-LAST:event_exitActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        JOptionPane.showMessageDialog(rootPane, "Készítők: \nKészült: 2020 ");
+        JOptionPane.showMessageDialog(rootPane, "Készítők: \nKészült: 2020 ","Információ",JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void specItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_specItemStateChanged
@@ -554,7 +575,9 @@ public class View extends javax.swing.JFrame {
     }//GEN-LAST:event_deleteActionPerformed
 
     private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
-        if (listModel.size() < 0) {
+
+        if (listModel.size() == 0) {
+            JOptionPane.showMessageDialog(rootPane, "Nincs menthető elem!","Hiba", JOptionPane.ERROR_MESSAGE );
             return;
         }
         int confirmed = JOptionPane.showConfirmDialog(null, "Biztosan menti?", "Mentés", JOptionPane.YES_NO_OPTION);
@@ -564,6 +587,19 @@ public class View extends javax.swing.JFrame {
 
 
     }//GEN-LAST:event_saveActionPerformed
+
+    private void modifyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modifyActionPerformed
+        JOptionPane.showMessageDialog(rootPane, "Jelenleg nem elérhető funkció!");
+        if (fishList.getSelectedIndex() < 0) {
+            
+            //JOptionPane.showMessageDialog(rootPane, "Nincs kiválasztott elem!","Hiba", JOptionPane.ERROR_MESSAGE );
+            return;
+        }
+        
+        //changeFishData(fishes);
+
+        
+    }//GEN-LAST:event_modifyActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
