@@ -3,6 +3,7 @@ package aquariumproject;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 public class FileReadWrite {
     private static ArrayList<String> fishData = new ArrayList<>();
@@ -20,6 +21,7 @@ public class FileReadWrite {
             for (Fish temp : fish) {
                 writer.writeBytes(temp.toString()+"\n");
             }
+            JOptionPane.showMessageDialog(null,"Sikeres mentés!","Info", JOptionPane.INFORMATION_MESSAGE);
         } catch (IOException exc) {
             System.out.println("Hiba: "+exc);
         }

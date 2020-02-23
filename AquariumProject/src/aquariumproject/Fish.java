@@ -2,6 +2,10 @@ package aquariumproject;
 
 public class Fish {
 
+    public void setPicsID(int picsID) {
+        this.picsID = picsID;
+    }
+
    
 
     

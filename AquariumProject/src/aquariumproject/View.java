@@ -17,20 +17,30 @@ public class View extends javax.swing.JFrame {
     private void saveUserData() {
         data.writeData(fishes);
     }
-    private void changeFishData(ArrayList<Fish> fish){
+    //Félig kész funkció
+    private void changeFishData(ArrayList<Fish> fishAct){
+        if(!errorCheck()){
         String names = fishList.getSelectedValue();
         System.out.println(names);
-        for (Fish temp : fish) {
+        for (Fish temp : fishAct) {
+            int pics = 0;
+            for (String specAct : fish) {
+                if(((String) spec.getSelectedItem()).equals(specAct.split(" ")[0]))
+                    pics = Integer.parseInt(specAct.split(" ")[5]);
+            }
             if(temp.getName().equals(names)){
-                temp.setName(name.getText()); 
+               // fishList.setSelectedValue(name.getText(), rootPaneCheckingEnabled);
+               // temp.setName(name.getText()); 
                 temp.setAge((int) age.getValue()); 
                 temp.setSpecies((String) spec.getSelectedItem()); 
                 temp.setSex(getSex()); 
                 name.setText(" ");
                 age.setValue(1);
+                temp.setPicsID(pics);
+                JOptionPane.showMessageDialog(null, "Sikeres módosítás!","Info", JOptionPane.INFORMATION_MESSAGE); 
             }
         }
-        
+        }
         
     }
     
@@ -70,6 +80,9 @@ public class View extends javax.swing.JFrame {
                     name.setText("");
                     age.setValue(1);
                     fishList.setSelectedIndex(-1);
+                    male.setSelected(true);
+                    JOptionPane.showMessageDialog(null, "Sikeres eltávolítás!","Info", JOptionPane.INFORMATION_MESSAGE); 
+                    
                 }
             }
         } catch (Exception e) {
@@ -144,6 +157,7 @@ public class View extends javax.swing.JFrame {
             Fish fish = new Fish(name.getText(), (int) age.getValue(), (String) spec.getSelectedItem(), 100, getSex(), Integer.parseInt(temp.getText().split("-")[0]), Integer.parseInt(size.getText().split("-")[0]), food.getText(), Integer.parseInt(minSize.getText().split("-")[0]), picsID);
             fishes.add(fish);
             listModel.addElement(fish.getName());
+            JOptionPane.showMessageDialog(null, "Sikeres hozzáadás!","Info", JOptionPane.INFORMATION_MESSAGE); 
         }
         name.setText("");
         age.setValue(1);
@@ -589,14 +603,14 @@ public class View extends javax.swing.JFrame {
     }//GEN-LAST:event_saveActionPerformed
 
     private void modifyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modifyActionPerformed
-        JOptionPane.showMessageDialog(rootPane, "Jelenleg nem elérhető funkció!");
+        //JOptionPane.showMessageDialog(rootPane, "Jelenleg nem elérhető funkció!");
         if (fishList.getSelectedIndex() < 0) {
             
-            //JOptionPane.showMessageDialog(rootPane, "Nincs kiválasztott elem!","Hiba", JOptionPane.ERROR_MESSAGE );
+            JOptionPane.showMessageDialog(rootPane, "Nincs kiválasztott elem!","Hiba", JOptionPane.ERROR_MESSAGE );
             return;
         }
         
-        //changeFishData(fishes);
+        changeFishData(fishes);
 
         
     }//GEN-LAST:event_modifyActionPerformed
