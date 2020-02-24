@@ -17,10 +17,10 @@ public class View extends javax.swing.JFrame {
     private void saveUserData() {
         data.writeData(fishes);
     }
-    //Félig kész funkció
+    //Félig kész funkció 
     private void changeFishData(ArrayList<Fish> fishAct){
         if(!errorCheck()){
-        String names = fishList.getSelectedValue();
+        String names = listModel.getElementAt(fishList.getSelectedIndex());
         System.out.println(names);
         for (Fish temp : fishAct) {
             int pics = 0;
@@ -29,6 +29,10 @@ public class View extends javax.swing.JFrame {
                     pics = Integer.parseInt(specAct.split(" ")[5]);
             }
             if(temp.getName().equals(names)){
+               /*Hibás a név megváltoztatáskor
+                 Be kell még vezetni egy változtatás ellenorző funkciót
+                 hogy csak a tényleges modosítás eseten fusson le
+                */
                // fishList.setSelectedValue(name.getText(), rootPaneCheckingEnabled);
                // temp.setName(name.getText()); 
                 temp.setAge((int) age.getValue()); 
@@ -37,6 +41,8 @@ public class View extends javax.swing.JFrame {
                 name.setText(" ");
                 age.setValue(1);
                 temp.setPicsID(pics);
+                
+                fishList.setSelectedIndex(-1);
                 JOptionPane.showMessageDialog(null, "Sikeres módosítás!","Info", JOptionPane.INFORMATION_MESSAGE); 
             }
         }
@@ -72,7 +78,7 @@ public class View extends javax.swing.JFrame {
 
     private void removeFish(ArrayList<Fish> temporary) {
         try {
-            String names = fishList.getSelectedValue();;
+            String names = listModel.getElementAt(fishList.getSelectedIndex());
             for (Fish actual : temporary) {
                 if (names.equals(actual.getName())) {
                     fishes.remove(actual);
@@ -101,7 +107,7 @@ public class View extends javax.swing.JFrame {
 
     private void showData(ArrayList<Fish> temporary) {
         try {
-            String names = fishList.getSelectedValue();
+            String names = listModel.getElementAt(fishList.getSelectedIndex());
             for (Fish actual : temporary) {
                 if (names.equals(actual.getName())) {
                     name.setText(actual.getName());
