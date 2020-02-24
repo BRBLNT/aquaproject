@@ -13,47 +13,47 @@ public class View extends javax.swing.JFrame {
     ArrayList<Fish> fishes = new ArrayList<>();
     ArrayList<String> userFish = data.getUserFishData();
     //ImageIcon dialogIcon = new ImageIcon("icon.png");
-    
+
     private void saveUserData() {
         data.writeData(fishes);
     }
-    
+
     //Félig kész funkció 
-    private void changeFishData(ArrayList<Fish> fishAct){
-        if(!errorCheck()){
-        String names = listModel.getElementAt(fishList.getSelectedIndex());
-        System.out.println(names);
-        for (Fish temp : fishAct) {
-            
-            int pics = 0;
-            for (String specAct : fish) {
-                if(((String) spec.getSelectedItem()).equals(specAct.split(" ")[0]))
-                    pics = Integer.parseInt(specAct.split(" ")[5]);
-            }
-            if(temp.getName().equals(names)){
-                
-               /*Hibás a név megváltoztatáskor
+    private void changeFishData(ArrayList<Fish> fishAct) {
+        if (!errorCheck()) {
+            String names = listModel.getElementAt(fishList.getSelectedIndex());
+            System.out.println(names);
+            for (Fish temp : fishAct) {
+
+                int pics = 0;
+                for (String specAct : fish) {
+                    if (((String) spec.getSelectedItem()).equals(specAct.split(" ")[0])) {
+                        pics = Integer.parseInt(specAct.split(" ")[5]);
+                    }
+                }
+                if (temp.getName().equals(names)) {
+
+                    /*Hibás a név megváltoztatáskor
                  Be kell még vezetni egy változtatás ellenorző funkciót
                  hogy csak a tényleges modosítás eseten fusson le
-                */
-               
-                listModel.setElementAt(name.getText(), fishList.getSelectedIndex());
-                temp.setName((String)name.getText()); 
-                temp.setAge((int) age.getValue()); 
-                temp.setSpecies((String) spec.getSelectedItem()); 
-                temp.setSex(getSex()); 
+                     */
+                    listModel.setElementAt(name.getText(), fishList.getSelectedIndex());
+                    temp.setName((String) name.getText());
+                    temp.setAge((int) age.getValue());
+                    temp.setSpecies((String) spec.getSelectedItem());
+                    temp.setSex(getSex());
 //                name.setText(" ");
 //                age.setValue(1);
-                temp.setPicsID(pics);
-                
-                fishList.setSelectedIndex(-1);
-                JOptionPane.showMessageDialog(null, "Sikeres módosítás!","Info", JOptionPane.INFORMATION_MESSAGE); 
+                    temp.setPicsID(pics);
+
+                    fishList.setSelectedIndex(-1);
+                    JOptionPane.showMessageDialog(null, "Sikeres módosítás!", "Info", JOptionPane.INFORMATION_MESSAGE);
+                }
             }
         }
-        }
-        
+
     }
-    
+
     private void loadData(ArrayList<String> fishesTemp) {
         for (String str : fishesTemp) {
             try {
@@ -91,12 +91,12 @@ public class View extends javax.swing.JFrame {
                     age.setValue(1);
                     fishList.setSelectedIndex(-1);
                     male.setSelected(true);
-                    JOptionPane.showMessageDialog(null, "Sikeres eltávolítás!","Info", JOptionPane.INFORMATION_MESSAGE); 
-                    
+                    JOptionPane.showMessageDialog(null, "Sikeres eltávolítás!", "Info", JOptionPane.INFORMATION_MESSAGE);
+
                 }
             }
         } catch (Exception e) {
-            System.out.println("removeFish Hiba "+e);
+            System.out.println("removeFish Hiba " + e);
         }
 
     }
@@ -147,7 +147,7 @@ public class View extends javax.swing.JFrame {
         boolean error = false;
         if (name.getText().isEmpty() || (int) age.getValue() <= 0) {
             error = true;
-            JOptionPane.showMessageDialog(rootPane, "Hibás érték vagy üres mező!","Hiba", JOptionPane.ERROR_MESSAGE );
+            JOptionPane.showMessageDialog(rootPane, "Hibás érték vagy üres mező!", "Hiba", JOptionPane.ERROR_MESSAGE);
         }
         return error;
     }
@@ -168,7 +168,7 @@ public class View extends javax.swing.JFrame {
             Fish fish = new Fish(name.getText(), (int) age.getValue(), (String) spec.getSelectedItem(), 100, getSex(), Integer.parseInt(temp.getText().split("-")[0]), Integer.parseInt(size.getText().split("-")[0]), food.getText(), Integer.parseInt(minSize.getText().split("-")[0]), picsID);
             fishes.add(fish);
             listModel.addElement(fish.getName());
-            JOptionPane.showMessageDialog(null, "Sikeres hozzáadás!","Info", JOptionPane.INFORMATION_MESSAGE); 
+            JOptionPane.showMessageDialog(null, "Sikeres hozzáadás!", "Info", JOptionPane.INFORMATION_MESSAGE);
         }
         name.setText("");
         age.setValue(1);
@@ -571,7 +571,7 @@ public class View extends javax.swing.JFrame {
     }//GEN-LAST:event_exitActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        JOptionPane.showMessageDialog(rootPane, "Készítők: \nKészült: 2020 ","Információ",JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(rootPane, "Készítők: \nKészült: 2020 ", "Információ", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void specItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_specItemStateChanged
@@ -588,7 +588,7 @@ public class View extends javax.swing.JFrame {
 
     private void deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteActionPerformed
         if (fishList.getSelectedIndex() < 0) {
-            JOptionPane.showMessageDialog(rootPane, "Nincs kiválasztott elem!","Hiba", JOptionPane.ERROR_MESSAGE );
+            JOptionPane.showMessageDialog(rootPane, "Nincs kiválasztott elem!", "Hiba", JOptionPane.ERROR_MESSAGE);
             return;
         }
         int confirmed = JOptionPane.showConfirmDialog(null, "Biztosan eltávolítja?", "Törlés", JOptionPane.YES_NO_OPTION);
@@ -602,7 +602,7 @@ public class View extends javax.swing.JFrame {
     private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
 
         if (listModel.size() == 0) {
-            JOptionPane.showMessageDialog(rootPane, "Nincs menthető elem!","Hiba", JOptionPane.ERROR_MESSAGE );
+            JOptionPane.showMessageDialog(rootPane, "Nincs menthető elem!", "Hiba", JOptionPane.ERROR_MESSAGE);
             return;
         }
         int confirmed = JOptionPane.showConfirmDialog(null, "Biztosan menti?", "Mentés", JOptionPane.YES_NO_OPTION);
@@ -616,14 +616,14 @@ public class View extends javax.swing.JFrame {
     private void modifyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modifyActionPerformed
         //JOptionPane.showMessageDialog(rootPane, "Jelenleg nem elérhető funkció!");
         if (fishList.getSelectedIndex() < 0) {
-            
-            JOptionPane.showMessageDialog(rootPane, "Nincs kiválasztott elem!","Hiba", JOptionPane.ERROR_MESSAGE );
+
+            JOptionPane.showMessageDialog(rootPane, "Nincs kiválasztott elem!", "Hiba", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        
+
         changeFishData(fishes);
 
-        
+
     }//GEN-LAST:event_modifyActionPerformed
 
     public static void main(String args[]) {

@@ -6,10 +6,6 @@ public class Fish {
         this.picsID = picsID;
     }
 
-   
-
-    
-    
     public String getName() {
         return name;
     }
@@ -95,8 +91,8 @@ public class Fish {
     public int getPicsID() {
         return picsID;
     }
-    
-    public Fish(String name, int age, String species, int health, boolean sex, int temp, int lenght, String food, int minimumPoolSize,int picsID) {
+
+    public Fish(String name, int age, String species, int health, boolean sex, int temp, int lenght, String food, int minimumPoolSize, int picsID) {
         this.name = name;
         this.age = age;
         this.species = species;
@@ -108,13 +104,11 @@ public class Fish {
         this.minimumPoolSize = minimumPoolSize;
         this.picsID = picsID;
     }
-    
-     @Override
-        public String toString() {
-        String str = name+" "+age+" "+species+" "+health+" "+sex+" "+temp+" "+lenght+" "+food+" "+minimumPoolSize+" "+picsID;
+
+    @Override
+    public String toString() {
+        String str = name + " " + age + " " + species + " " + health + " " + sex + " " + temp + " " + lenght + " " + food + " " + minimumPoolSize + " " + picsID;
         return str;
     }
-    
-    
-    
+
 }

@@ -6,51 +6,54 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 public class FileReadWrite {
+
     private static ArrayList<String> fishData = new ArrayList<>();
     private static ArrayList<String> userFishData = new ArrayList<>();
-    
-    public FileReadWrite(){
+
+    public FileReadWrite() {
         readFile();
     }
-    
-    public void writeData(ArrayList<Fish> fish){
+
+    public void writeData(ArrayList<Fish> fish) {
         try {
-            RandomAccessFile writer = new RandomAccessFile("user.dat","rw");
+            RandomAccessFile writer = new RandomAccessFile("user.dat", "rw");
             //writer.seek(writer.length());
-           
+
             for (Fish temp : fish) {
-                writer.writeBytes(temp.toString()+"\n");
+                writer.writeBytes(temp.toString() + "\n");
             }
-            JOptionPane.showMessageDialog(null,"Sikeres mentés!","Info", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Sikeres mentés!", "Info", JOptionPane.INFORMATION_MESSAGE);
         } catch (IOException exc) {
-            System.out.println("Hiba: "+exc);
+            System.out.println("Hiba: " + exc);
         }
     }
-    
+
     public ArrayList<String> getFishData() {
         return fishData;
     }
-    
+
     public ArrayList<String> getUserFishData() {
         return userFishData;
     }
-    
-    private static void readFile(){
-        try{
-            RandomAccessFile fileRead = new RandomAccessFile("fish.dat","r");
-            for (String line = fileRead.readLine(); line != null ; line = fileRead.readLine()) {
+
+    private static void readFile() {
+        try {
+            RandomAccessFile fileRead = new RandomAccessFile("fish.dat", "r");
+            for (String line = fileRead.readLine(); line != null; line = fileRead.readLine()) {
                 fishData.add(line);
             }
             fileRead.close();
+        } catch (IOException exc) {
+            System.out.println("fish Hiba: " + exc);
         }
-        catch(IOException exc){System.out.println("fish Hiba: "+exc);}
-        try{
-            RandomAccessFile fileRead = new RandomAccessFile("user.dat","r");
-            for (String line = fileRead.readLine(); line != null ; line = fileRead.readLine()) {
+        try {
+            RandomAccessFile fileRead = new RandomAccessFile("user.dat", "r");
+            for (String line = fileRead.readLine(); line != null; line = fileRead.readLine()) {
                 userFishData.add(line);
             }
             fileRead.close();
+        } catch (IOException exc) {
+            System.out.println("user Hiba: " + exc);
         }
-        catch(IOException exc){System.out.println("user Hiba: "+exc);}
     }
 }

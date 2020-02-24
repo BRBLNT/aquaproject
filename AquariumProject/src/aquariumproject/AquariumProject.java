@@ -8,9 +8,9 @@ public class AquariumProject {
     Táplálás szükséges (eltelt idő) 3. file log.dat
     Vízhőmérsékelt szimulálás 
     Újratöltö funkció
-    */
+     */
     public static void main(String[] args) {
-        
+
     }
-    
+
 }
