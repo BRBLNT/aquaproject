@@ -43,7 +43,7 @@ public class FileReadWrite {
             }
             fileRead.close();
         }
-        catch(IOException exc){System.out.println("Hiba: "+exc);}
+        catch(IOException exc){System.out.println("fish Hiba: "+exc);}
         try{
             RandomAccessFile fileRead = new RandomAccessFile("user.dat","r");
             for (String line = fileRead.readLine(); line != null ; line = fileRead.readLine()) {
@@ -51,6 +51,6 @@ public class FileReadWrite {
             }
             fileRead.close();
         }
-        catch(IOException exc){System.out.println("Hiba: "+exc);}
+        catch(IOException exc){System.out.println("user Hiba: "+exc);}
     }
 }

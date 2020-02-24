@@ -17,29 +17,33 @@ public class View extends javax.swing.JFrame {
     private void saveUserData() {
         data.writeData(fishes);
     }
+    
     //Félig kész funkció 
     private void changeFishData(ArrayList<Fish> fishAct){
         if(!errorCheck()){
         String names = listModel.getElementAt(fishList.getSelectedIndex());
         System.out.println(names);
         for (Fish temp : fishAct) {
+            
             int pics = 0;
             for (String specAct : fish) {
                 if(((String) spec.getSelectedItem()).equals(specAct.split(" ")[0]))
                     pics = Integer.parseInt(specAct.split(" ")[5]);
             }
             if(temp.getName().equals(names)){
+                
                /*Hibás a név megváltoztatáskor
                  Be kell még vezetni egy változtatás ellenorző funkciót
                  hogy csak a tényleges modosítás eseten fusson le
                 */
-               // fishList.setSelectedValue(name.getText(), rootPaneCheckingEnabled);
-               // temp.setName(name.getText()); 
+               
+                listModel.setElementAt(name.getText(), fishList.getSelectedIndex());
+                temp.setName((String)name.getText()); 
                 temp.setAge((int) age.getValue()); 
                 temp.setSpecies((String) spec.getSelectedItem()); 
                 temp.setSex(getSex()); 
-                name.setText(" ");
-                age.setValue(1);
+//                name.setText(" ");
+//                age.setValue(1);
                 temp.setPicsID(pics);
                 
                 fishList.setSelectedIndex(-1);
@@ -59,10 +63,10 @@ public class View extends javax.swing.JFrame {
                         check(str.split(" ")[4]),
                         Integer.parseInt(str.split(" ")[5]), Integer.parseInt(str.split(" ")[6]),
                         str.split(" ")[7], Integer.parseInt(str.split(" ")[8]), Integer.parseInt(str.split(" ")[9]));
-                listModel.addElement(str.split(" ")[0]);
+                listModel.addElement(ActualFish.getName());
                 fishes.add(ActualFish);
             } catch (Exception e) {
-                System.out.println("Hiba: " + e);
+                System.out.println("loadData Hiba: " + e);
             }
 
         }
@@ -92,6 +96,7 @@ public class View extends javax.swing.JFrame {
                 }
             }
         } catch (Exception e) {
+            System.out.println("removeFish Hiba "+e);
         }
 
     }
